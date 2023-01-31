@@ -1,0 +1,75 @@
+import java.util.ArrayList;
+
+public class CarServiceStation {
+    public enum Type {
+        HATCHBACK, SEDAN, SUV
+    }
+
+    public enum Service {
+        BS01("Basic Servicing", 2000, 4000, 5000),
+        EF01("Engine Fixing", 5000, 8000, 10000),
+        CF01("Clutch Fixing", 2000, 4000, 6000),
+        BF01("Brake Fixing", 1000, 1500, 2500),
+        GF01("Gear Fixing", 3000, 6000, 8000);
+
+        private final String name;
+        private final int hatchbackPrice;
+        private final int sedanPrice;
+        private final int suvPrice;
+
+        Service(String name, int hatchbackPrice, int sedanPrice, int suvPrice) {
+            this.name = name;
+            this.hatchbackPrice = hatchbackPrice;
+            this.sedanPrice = sedanPrice;
+            this.suvPrice = suvPrice;
+        }
+
+        public int getPrice(Type type) {
+            switch (type) {
+                case HATCHBACK:
+                    return hatchbackPrice;
+                case SEDAN:
+                    return sedanPrice;
+                case SUV:
+                    return suvPrice;
+                default:
+                    return 0;
+            }
+        }
+    }
+
+    public static class Bill {
+        private final Type type;
+        private final ArrayList<Service> services;
+        private int total;
+
+        public Bill(Type type, ArrayList<Service> services) {
+            this.type = type;
+            this.services = services;
+            this.total = 0;
+        }
+
+        public void generateBill() {
+            System.out.println("Type of Car: " + type);
+            System.out.println("Service Codes:");
+            for (Service service : services) {
+                int price = service.getPrice(type);
+                total += price;
+                System.out.println(service.name + " - " + price);
+            }
+            System.out.println("Total Bill: " + total);
+            if (total > 10000) {
+                System.out.println("Complimentary Cleaning Included");
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        Type type = Type.HATCHBACK;
+        ArrayList<Service> services = new ArrayList<>();
+        services.add(Service.BS01);
+        services.add(Service.EF01);
+        Bill bill = new Bill(type, services);
+        bill.generateBill();
+    }
+}
